@@ -22,6 +22,7 @@ import (
 
 func init() {
 	utilruntime.Must(features.HubMutableFeatureGate.Add(ocmfeature.DefaultHubWorkFeatureGates))
+	utilruntime.Must(features.HubMutableFeatureGate.Add(ocmfeature.DefaultHubPlacementFeatureGates))
 	utilruntime.Must(features.HubMutableFeatureGate.Add(ocmfeature.DefaultHubRegistrationFeatureGates))
 	utilruntime.Must(features.HubMutableFeatureGate.Add(ocmfeature.DefaultHubAddonManagerFeatureGates))
 	utilruntime.Must(features.HubMutableFeatureGate.Add(mcfeature.DefaultControlPlaneFeatureGates))

@@ -12,8 +12,10 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/apiserver/pkg/admission"
+	genericadmissioninitializer "k8s.io/apiserver/pkg/admission/initializer"
 	"k8s.io/apiserver/pkg/admission/plugin/webhook/generic"
 	"k8s.io/apiserver/pkg/admission/plugin/webhook/request"
+	"k8s.io/client-go/kubernetes"
 	clusterv1api "open-cluster-management.io/api/cluster/v1"
 	clusterwebhookv1 "open-cluster-management.io/ocm/pkg/registration/webhook/v1"
 	runtimeadmission "sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -34,12 +36,17 @@ type Plugin struct {
 	webhook *clusterwebhookv1.ManagedClusterWebhook
 }
 
+func (p *Plugin) SetExternalKubeClientSet(client kubernetes.Interface) {
+	p.webhook.SetExternalKubeClientSet(client)
+}
+
 func (p *Plugin) ValidateInitialization() error {
 	return nil
 }
 
 var _ admission.MutationInterface = &Plugin{}
 var _ admission.InitializationValidator = &Plugin{}
+var _ genericadmissioninitializer.WantsExternalKubeClientSet = &Plugin{}
 
 func NewPlugin() *Plugin {
 	return &Plugin{

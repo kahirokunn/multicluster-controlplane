@@ -88,7 +88,9 @@ func Run(c *config.CompletedConfig, sharedInformers informers.SharedInformerFact
 	defer c.EventBroadcaster.Shutdown()
 
 	if cfgz, err := configz.New(ConfigzName); err == nil {
-		cfgz.Set(c.ComponentConfig)
+		if err := cfgz.Set(&c.ComponentConfig); err != nil {
+			klog.Errorf("unable to set configz: %v", err)
+		}
 	} else {
 		klog.Errorf("unable to register configz: %v", err)
 	}
